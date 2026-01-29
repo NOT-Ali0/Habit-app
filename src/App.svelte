@@ -87,7 +87,7 @@
     <HabitList />
 
     <div class="actions-wrapper">
-        <button class="modern-btn login-btn" on:click={AuthMethod}>
+        <button class="modern-btn login-btn" on:click={getauthcode}>
             <span>Login</span>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
