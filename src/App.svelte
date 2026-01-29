@@ -12,28 +12,35 @@
     let Token = "";
 
     //authentecation
-    let AuthMethod = () => {
+    let tokenAfterFitching = $state();
+     let getauthcode = () => {
         my.getAuthCode({
             scopes: ["auth_base", "USER_ID"],
-            success: async (res) => {
+            success: (res) => {
                 Token = res.authCode;
-                document.getElementById("AuthCode").textContent = Token;
-                let response = await fetch(
-                    "http://server.mouamle.space:19990/api/auth-with-superQi",
-                    {
-                        method: "POST",
-                        body: JSON.stringify({
-                            email: "tretrams@gmail.com",
-                            token: Token,
-                        }),
+                fetch("https://its.mouamle.space/api/auth-with-superQi", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
                     },
-                );
-                my.alert({
-                    content: response.ok,
-                });
-            },
-            fail: (res) => {
-                console.log(res.authErrorScopes);
+                    body: JSON.stringify({
+                        token: Token,
+                    }),
+                })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        tokenAfterFitching = data.token;
+                        my.alert({
+                            content: "Login successful",
+                        });
+                        // save token in local storage to keep user logged in
+                        localStorage.setItem("token", tokenAfterFitching);
+                    })
+                    .catch((err) => {
+                        my.alert({
+                            content: "Login failed" + err,
+                        });
+                    });
             },
         });
     };
